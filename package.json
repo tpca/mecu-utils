@@ -26,7 +26,7 @@
     ],
     "main": "pssh.min.js",
     "scripts": {
-        "test": "grunt"
+        "prepublish": "grunt"
     },
     "contributors": [
         "Christian Dallago <code@dallago.us> (https://github.com/sacdallago)"
