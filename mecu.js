@@ -1,50 +1,70 @@
 /*jshint esversion: 6 */
 
-module.exports = {
-    /* 2 Example entries of PSSH file:
-    *
-    *  000624d4028992d83dc242ee6a282059,c66505315f4966bc9381d721c462db26,1,1.5e-58,0.16,1-37:2-38 39-40:39-40 43-53:41-51 54-87:53-86 89-107:87-105 109-149:106-146 150-156:148-154 158-176:155-173
-    *  000624d4028992d83dc242ee6a282059,ee981409431eefc30969429f1ab32709,1,1.1e-55,0.23,1-40:2-41 43-53:42-52 54-87:54-87 89-107:88-106 109-149:107-147 150-179:149-178
-    *
-    */
-    parsePSSH2file : function(data){
-        // Split the file into rows
-        var rows = data.split(/\n/);
-        return rows
-        // Map every comma separated element in the row to attributes
-            .map(function(element){
-            var attributes = element.split(',');
+// Utilities:
 
-            if(attributes.length == 6){
+/*  Convert TSV to JSON
+ **  The TSV must have headers!
+ */
+function tsvJSON(tsv){
 
-                // Eg: "1-40:2-41 43-53:42-52 54-87:54-87 89-107:88-106 109-149:107-147 150-179:149-178"
-                var Alignment = attributes[5].replace(/\r?\n|\r/,"");
+    var lines=tsv.split("\n");
+    var result = [];
+    var headers=lines[0].split("\t");
 
-                // Eg: ["1-40:2-41", "43-53:42-52", "54-87:54-87", "89-107:88-106", "109-149:107-147", "150-179:149-178"]
-                var pieces = Alignment.split(/\s/g);
-                var Match_length = 0;
+    for(var i=1;i<lines.length;i++){
 
-                pieces.forEach(function(piece){
-                    [start, end] = piece.split(/\-/);
-                    Match_length += (parseInt(end)-parseInt(start)+1);
-                });
+        var obj = {};
+        var currentLine=lines[i].split("\t");
 
-                return {
-                    protein_sequence_hash: attributes[0],
-                    PDB_chain_hash: attributes[1],
-                    Repeat_domains: attributes[2],
-                    E_value: attributes[3],
-                    Identity_Score: attributes[4],
-                    Match_length: Match_length,
-                    Alignment: Alignment
-                };
+        for(var j=0;j<headers.length;j++){
+            if(headers[j] != ''){
+                obj[headers[j]] = currentLine[j];
             }
-        })
-        // Filter to get rid of undefined:
-        //    - Last row of file is usually empty.
-        //    - If a row is nasty and has length != 6
-            .filter(function(element){
-            return element !== undefined;
-        });
+        }
+
+        result.push(obj);
+    }
+
+    return result;
+}
+
+module.exports = {
+
+    parse: function(data){
+        /* Exaple header and two lines of mecu read
+         *
+         *  	Accession	Description	GeneName	ExptID	Peptides	PSMs	AAs	MW.kDA	pI	RatioCount	T37	T40	T43	T46	T49	T52	T55	T58	T61	T64	TotalExpt
+         *  5	P08238	Heat shock protein HSP 90-beta OS=Homo sapiens GN=HSP90AB1 PE=1 SV=4	HSP90AB1	NA	152	7389	724	83.212	5.03	526	0.993418134979102	0.978615783630729	0.97497273873077	0.910103808578295	0.664154031369918	0.29416643578552	0.118510981760351	0.070412173454166	0.0494253861148508	0.0497946624113495	4
+         *  51	P07900	Isoform 2 of Heat shock protein HSP 90-alpha OS=Homo sapiens GN=HSP90AA1	HSP90AA1	NA	135	5930	854	98.099	5.16	562	0.993418134979102	0.96630219963012	0.971515311976001	0.895380650942425	0.679949714261505	0.301507737429416	0.143483356667326	0.082749434523936	0.06300393504397	0.0591289023326945	4
+         */
+        data = tsvJSON(data);
+
+        var proteins = [];
+
+        for(var i=0; i<data.length; i++){
+            var protein = {
+                uniprotId: data[i]['Accession'],
+                primaryGene: data[i]['GeneName'],
+                peptides: parseInt(data[i]['Peptides']),
+                psms: data[i]['PSMs'],
+                total_expt: parseInt(data[i]['TotalExpt']),
+                reads: []
+            }
+            // Peptides,  PSMs, Total Expt  and Ratio Count
+
+            for(var key in data[i]){
+                if(key.match(/^T[0-9]+/)){
+                    let temperatureRead = {
+                        "temperature": parseInt(key.substr(1,key.length)),
+                        "ratio": parseFloat(data[i][key])
+                    };
+                    protein.reads.push(temperatureRead);
+                }
+            }
+
+            proteins.push(protein);
+        }
+
+        return proteins;
     }
 };
