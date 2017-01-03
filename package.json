@@ -24,7 +24,7 @@
         "science",
         "biojs"
     ],
-    "main": "pssh.min.js",
+    "main": "mecu.min.js",
     "scripts": {
         "prepublish": "grunt"
     },
