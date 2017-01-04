@@ -42,27 +42,29 @@ module.exports = {
         var proteins = [];
 
         for(var i=0; i<data.length; i++){
-            var protein = {
-                uniprotId: data[i].Accession,
-                primaryGene: data[i].GeneName,
-                peptides: parseInt(data[i].Peptides),
-                psms: data[i].PSMs,
-                totalExpt: parseInt(data[i].TotalExpt),
-                reads: []
-            };
-            // Peptides,  PSMs, Total Expt  and Ratio Count
+            if(data[i].Accession !== '' && data[i].Accession !== "" && data[i].Accession !== undefined){
+                var protein = {
+                    uniprotId: data[i].Accession,
+                    primaryGene: data[i].GeneName,
+                    peptides: parseInt(data[i].Peptides),
+                    psms: data[i].PSMs,
+                    totalExpt: parseInt(data[i].TotalExpt),
+                    reads: []
+                };
+                // Peptides,  PSMs, Total Expt  and Ratio Count
 
-            for(var key in data[i]){
-                if(key.match(/^T[0-9]+/)){
-                    var temperatureRead = {
-                        "temperature": parseInt(key.substr(1,key.length)),
-                        "ratio": parseFloat(data[i][key])
-                    };
-                    protein.reads.push(temperatureRead);
+                for(var key in data[i]){
+                    if(key.match(/^T[0-9]+/)){
+                        var temperatureRead = {
+                            "temperature": parseInt(key.substr(1,key.length)),
+                            "ratio": parseFloat(data[i][key])
+                        };
+                        protein.reads.push(temperatureRead);
+                    }
                 }
-            }
 
-            proteins.push(protein);
+                proteins.push(protein);
+            }
         }
 
         return proteins;
