@@ -44,8 +44,8 @@ module.exports = {
         for(var i=0; i<data.length; i++){
             if(data[i].Accession !== '' && data[i].Accession !== "" && data[i].Accession !== undefined){
                 var protein = {
-                    uniprotId: data[i].Accession,
-                    primaryGene: data[i].GeneName,
+                    uniprotId: data[i].Accession.toUpperCase(),
+                    primaryGene: data[i].GeneName.toUpperCase(),
                     peptides: parseInt(data[i].Peptides),
                     psms: data[i].PSMs,
                     totalExpt: parseInt(data[i].TotalExpt),
