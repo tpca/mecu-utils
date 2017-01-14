@@ -1,7 +1,7 @@
 .gitignore
-git/
+examples/
+private/
 Gruntfile.js
 LICENSE
 README.md
 node_modules
-pssh.js

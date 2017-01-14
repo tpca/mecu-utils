@@ -1,37 +1,45 @@
 {
-    "name": "mecu-parser",
+    "name": "mecu-utils",
     "description": "A simple melting curves TSV parser",
-    "version": "0.0.1",
-    "homepage": "http://christian.dallago.us",
+    "version": "0.1.0",
+    "homepage": "https://github.com/sacdallago/mecu-utils",
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/sacdallago/mecu-parser.git"
+        "url": "git+https://github.com/sacdallago/mecu-utils.git"
     },
-    "author": "Christian Dallago <code@dallago.us>",
+    "author": {
+        "name": "Christian Dallago",
+        "email": "code@dallago.us"
+    },
     "license": "GPL-3.0",
     "dependencies": {},
     "devDependencies": {
-        "grunt": "^0.4.5",
-        "grunt-contrib-jshint": "^1.0.0",
-        "grunt-contrib-uglify": "^1.0.0"
+        "browserify": "latest",
+        "watchify": "latest",
+        "jshint": "latest",
+        "webpack": "latest"
     },
     "keywords": [
         "bio",
         "biology",
         "bioinformatics",
         "mecu",
-        "parser",
+        "utils",
+        "utils",
         "science",
         "biojs"
     ],
-    "main": "mecu.min.js",
+    "main": "build/mecu-utils.js",
     "scripts": {
-        "prepublish": "grunt"
+        "build": "webpack",
+        "watch": "webpack --progress --colors --watch",
+        "lint": "jshint -c .jshintrc lib --verbose",
+        "install": "webpack"
     },
     "contributors": [
         "Christian Dallago <code@dallago.us> (https://github.com/sacdallago)"
     ],
     "bugs": {
-        "url": "https://github.com/sacdallago/mecu-parser/issues"
+        "url": "https://github.com/sacdallago/mecu-utils/issues"
     }
 }
