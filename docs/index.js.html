@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width" charset="utf-8">
+    <title>MeCu Utils</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/cayman.min.css">
+    <link rel="stylesheet" href="css/prism.min.css">
+    <link rel="stylesheet" href="css/index.min.css">
+    <link rel="stylesheet" href="css/docs.min.css">
+    <link rel="stylesheet" href="css/bootstrap-responsive.min.css">
+  </head>
+  <body data-spy="scroll" data-target=".scrollspy">
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container"><a class="brand">Mr. Doc</a>
+          <div class="nav-collapse collapse">
+            <ul class="nav pull-right sponsored"></ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <header id="overview" class="jumbotron subhead">
+      <div class="container">
+        <h1>MeCu Utils</h1>
+        <p class="lead"></p>
+      </div>
+    </header>
+    <div class="container">
+      <div class="row">
+        <div class="span3 bs-docs-sidebar">
+          <ul class="nav nav-list bs-docs-sidenav affix-top">
+            <li><a href="index.html">Main</a></li>
+            <li class="active"><a href="index.js.html">index.js</a></li>
+          </ul>
+          <div class="scrollspy">
+            <ul class="nav nav-list bs-docs-sidenav affix-top">
+              <li><a href="#tsvJSON"><i class="alert alert-info"></i><span>tsvJSON</span></a>
+              </li>
+              <li><a href="#MecuUtils"><i class="alert alert-success"></i><span>MecuUtils</span></a>
+              </li>
+              <li><a href="#parse"><i class="alert alert-info"></i><span>parse</span></a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="span9">
+          <section id="tsvJSON">
+            <h1>tsvJSON</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-info radius ctx-type">function</div><span>&nbsp;</span><span>tsvJSON()</span><span>&nbsp;</span>
+            </p>
+          </section>
+          <div class="description"><p>Convert TSV to JSON</p><ul>
+<li>The TSV must have headers!</li>
+</ul>
+</div>
+          <pre><code class="language-javascript">function tsvJSON(tsv){
+
+    var lines=tsv.split(&quot;\n&quot;);
+    var result = [];
+    var headers=lines[0].split(&quot;\t&quot;);
+
+    for(var i=1;i&lt;lines.length;i++){
+
+        var obj = {};
+        var currentLine=lines[i].split(&quot;\t&quot;);
+
+        for(var j=0;j&lt;headers.length;j++){
+            if(headers[j] !== ''){
+                obj[headers[j]] = currentLine[j];
+            }
+        }
+
+        result.push(obj);
+    }
+
+    return result;
+}</code></pre>
+          <section id="MecuUtils">
+            <h1>MecuUtils</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-success radius ctx-type">class</div><span>&nbsp;</span><span>new MecuUtils()</span><span>&nbsp;</span>
+            </p>
+          </section>
+          <div class="description"><p>Class MecuUtils</p></div>
+          <pre><code class="language-javascript">class MecuUtils {</code></pre>
+          <section id="parse">
+            <h1>parse</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-info radius ctx-type">method</div><span>&nbsp;</span><span>MecuUtils.parse()</span><span>&nbsp;</span>
+            </p>
+          </section>
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th style="width:20%">Option name</th>
+                <th style="width:20%">Type</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>data</td>
+                <td></td>
+                <td></td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="description"><p>Parse TSV melting-curve data into array of objects</p></div>
+          <pre><code class="language-javascript">static parse(data){</code></pre>
+          <div class="description"><p>Exaple header and two lines of mecu read</p><pre><code> Accession    Description    GeneName    ExptID    Peptides    PSMs    AAs    MW.kDA    pI    RatioCount    T37    T40    T43    T46    T49    T52    T55    T58    T61    T64    TotalExpt
+</code></pre><p> 5    P08238    Heat shock protein HSP 90-beta OS=Homo sapiens GN=HSP90AB1 PE=1 SV=4    HSP90AB1    NA    152    7389    724    83.212    5.03    526    0.993418134979102    0.978615783630729    0.97497273873077    0.910103808578295    0.664154031369918    0.29416643578552    0.118510981760351    0.070412173454166    0.0494253861148508    0.0497946624113495    4<br /> 51    P07900    Isoform 2 of Heat shock protein HSP 90-alpha OS=Homo sapiens GN=HSP90AA1    HSP90AA1    NA    135    5930    854    98.099    5.16    562    0.993418134979102    0.96630219963012    0.971515311976001    0.895380650942425    0.679949714261505    0.301507737429416    0.143483356667326    0.082749434523936    0.06300393504397    0.0591289023326945    4</p></div>
+          <pre><code class="language-javascript">data = tsvJSON(data);
+
+var proteins = [];
+
+for(var i=0; i&lt;data.length; i++){
+    if(data[i].Accession !== '' &amp;&amp; data[i].Accession !== &quot;&quot; &amp;&amp; data[i].Accession !== undefined){
+        var protein = {
+            uniprotId: data[i].Accession.toUpperCase(),
+            primaryGene: data[i].GeneName.toUpperCase(),
+            peptides: parseInt(data[i].Peptides),
+            psms: data[i].PSMs,
+            totalExpt: parseInt(data[i].TotalExpt),
+            reads: []
+        };
+        // Peptides,  PSMs, Total Expt  and Ratio Count
+
+        for(var key in data[i]){
+            if(key.match(/^T[0-9]+/)){
+                var temperatureRead = {
+                    &quot;temperature&quot;: parseInt(key.substr(1,key.length)),
+                    &quot;ratio&quot;: parseFloat(data[i][key])
+                };
+                protein.reads.push(temperatureRead);
+            }
+        }
+
+        proteins.push(protein);
+    }
+}
+
+return proteins;
+    }
+};
+
+module.exports = MecuUtils;</code></pre>
+        </div>
+      </div>
+    </div>
+    <footer class="footer">
+      <div class="container">
+        <p>Documentation generated with <a href="https://github.com/mr-doc/mr-doc">Mr. Doc </a> created by <a href="https://twitter.com/FGRibreau" data-show-count="false" class="twitter-follow-button">Francois-Guillaume Ribreau </a></p>
+        <p>Mr. Doc is sponsored by <a href="http://bringr.net/?btt" title="Outil d'analyse des réseaux sociaux" class="bringr">Bringr </a> and <a href="https://redsmin.com/?btt" title="Full Redis GUI" class="redsmin">Redsmin</a></p>
+        <p>Theme borrowed from Twitter Bootstrap</p>
+      </div>
+    </footer>
+    <script src="js/twitter-widget.min.js"></script>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap-transition.min.js"></script>
+    <script src="js/bootstrap-scrollspy.min.js"></script>
+    <script src="js/bootstrap-dropdown.min.js"></script>
+    <script src="js/bootstrap-collapse.min.js"></script>
+    <script src="js/bootstrap-affix.min.js"></script>
+    <script src="js/prism.min.js"></script>
+    <script src="js/index.min.js"></script>
+  </body>
+</html>
