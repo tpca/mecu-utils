@@ -2,10 +2,10 @@
     "name": "mecu-utils",
     "description": "A simple melting curves TSV parser",
     "version": "0.1.0",
-    "homepage": "https://github.com/sacdallago/mecu-utils",
+    "homepage": "https://github.com/tpca/mecu-utils",
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/sacdallago/mecu-utils.git"
+        "url": "git+https://github.com/tpca/mecu-utils.git"
     },
     "author": {
         "name": "Christian Dallago",
@@ -14,9 +14,7 @@
     "license": "GPL-3.0",
     "dependencies": {},
     "devDependencies": {
-        "browserify": "latest",
         "watchify": "latest",
-        "jshint": "latest",
         "webpack": "latest"
     },
     "keywords": [
@@ -33,13 +31,13 @@
     "scripts": {
         "build": "webpack",
         "watch": "webpack --progress --colors --watch",
-        "lint": "jshint -c .jshintrc lib --verbose",
+        "docs": "mr-doc -s lib/ -o docs/ -n 'MeCu Utils'",
         "install": "webpack"
     },
     "contributors": [
         "Christian Dallago <code@dallago.us> (https://github.com/sacdallago)"
     ],
     "bugs": {
-        "url": "https://github.com/sacdallago/mecu-utils/issues"
+        "url": "https://github.com/tpca/mecu-utils/issues"
     }
 }
