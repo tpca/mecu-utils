@@ -32,7 +32,7 @@
         "build": "webpack",
         "watch": "webpack --progress --colors --watch",
         "docs": "mr-doc -s lib/ -o docs/ -n 'MeCu Utils'",
-        "install": "webpack"
+        "prepublish": "webpack"
     },
     "contributors": [
         "Christian Dallago <code@dallago.us> (https://github.com/sacdallago)"
