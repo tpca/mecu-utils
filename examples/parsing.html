@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div id="content">Content</div>
+<script src="../build/mecu-utils.js"></script>
+<script>
+    let text = `
+Accession	Description	GeneName	Peptides	PSMs	AAs	MW.kDA	pI	QuantifyingPSMs	T37	T40	T43	T46	T49	T52	T55	T58	T61	T64
+A0AV96	RNA-binding protein 47 OS=Homo sapiens GN=RBM47 PE=1 SV=2	RBM47	6	12	593	64.058	7.68	6	0.992	0.969	0.656	0.468	0.373	0.284	0.220	0.154	0.163	0.115
+A0AVF1	Tetratricopeptide repeat protein 26 OS=Homo sapiens GN=TTC26 PE=2 SV=1	TTC26	2	4	554	64.136	6.93	2	0.992	0.826	0.543	0.467	0.353	0.248	0.185	0.104	0.109	0.072
+A0AVT1	Ubiquitin-like modifier-activating enzyme 6 OS=Homo sapiens GN=UBA6 PE=1 SV=1	UBA6	109	378	1052	117.895	6.14	173	0.992	0.991	0.906	0.777	0.455	0.216	0.154	0.100	0.101	0.067
+A0FGR8	Isoform 6 of Extended synaptotagmin-2 OS=Homo sapiens GN=ESYT2	ESYT2	7	18	942	104.643	9.33	8	0.992	0.962	0.812	0.570	0.464	0.283	0.215	0.144	0.145	0.112
+A0JNW5	UHRF1-binding protein 1-like OS=Homo sapiens GN=UHRF1BP1L PE=1 SV=2	UHRF1BP1L	33	65	1464	164.095	6.32	26	0.992	1.002	0.912	0.814	0.653	0.494	0.298	0.179	0.137	0.110
+`;
+    let parsedJSON = MecuUtils.parse(text);
+    let el = document.getElementById("content");
+
+    el.textContent = JSON.stringify(parsedJSON);
+</script>
+</body>
+</html>
